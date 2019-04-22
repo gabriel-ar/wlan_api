@@ -804,13 +804,14 @@ namespace WlanApi {
 
             byte[] byte_key = Encoding.Default.GetBytes(key);
 
-            IntPtr key_ptr = Marshal.AllocHGlobal(byte_key.Length);
+            IntPtr key_ptr = Marshal.AllocHGlobal(byte_key.Length + 1);
 
             for(int c = 0; c < byte_key.Length; c++) {
                 Marshal.WriteByte(key_ptr, c, byte_key[c]);
                 }
+			Marshal.WriteByte(key_ptr, byte_key.Length, 0);
 
-            Wlan.WlanHostedNetworkSetSecondaryKey(clientHandle, (uint) byte_key.Length, key_ptr, true, true, out reason_result, IntPtr.Zero);
+			Wlan.WlanHostedNetworkSetSecondaryKey(clientHandle, (uint) byte_key.Length + 1, key_ptr, true, true, out reason_result, IntPtr.Zero);
             return reason_result;
             }
 
